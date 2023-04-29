@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ShareReview.Models\ShareReview.Models.csproj" />
+  </ItemGroup>
+
 </Project>
