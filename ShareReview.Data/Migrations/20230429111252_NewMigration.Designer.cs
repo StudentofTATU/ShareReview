@@ -12,7 +12,7 @@ using ShareReview.Data;
 namespace ShareReview.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230429104319_NewMigration")]
+    [Migration("20230429111252_NewMigration")]
     partial class NewMigration
     {
         /// <inheritdoc />
