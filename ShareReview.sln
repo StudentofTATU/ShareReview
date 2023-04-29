@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareReview.Services", "Sha
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareReview.Models", "ShareReview.Models\ShareReview.Models.csproj", "{B2244925-9828-42C8-ACD9-1DD1DA928922}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareReview.Contracts", "ShareReview.ViewModels\ShareReview.Contracts.csproj", "{A2188A0B-DA51-446C-BF99-26BCF9D072A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareReview.Contract", "ShareReview.ViewModels\ShareReview.Contract.csproj", "{A2188A0B-DA51-446C-BF99-26BCF9D072A4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareReview.Data", "ShareReview.Data\ShareReview.Data.csproj", "{FA1275FB-DC52-4372-BE3D-77F2B6F00BF9}"
 EndProject
