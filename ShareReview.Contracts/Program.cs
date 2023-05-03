@@ -1,4 +1,4 @@
-﻿namespace ShareReview.Contacts
+﻿namespace ShareReview.Contracts
 {
     internal class Program
     {
