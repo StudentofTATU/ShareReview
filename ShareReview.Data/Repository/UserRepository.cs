@@ -40,9 +40,9 @@ namespace ShareReview.Data.Repository
             return SaveChanges();
         }
 
-        public bool Delete(User user)
+        public bool Delete(string userId)
         {
-            User deleteUser = context.Users.Find(user.Id);
+            User deleteUser = context.Users.Find(userId);
             context.Users.Remove(deleteUser);
 
             return SaveChanges();
