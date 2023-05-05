@@ -4,7 +4,7 @@ using ShareReview.Models.Users;
 
 namespace ShareReview.Data.Repository
 {
-    internal class UserRepository : IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly AppDbContext context;
 

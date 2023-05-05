@@ -15,8 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ShareReview.Contracts\ShareReview.Contracts.csproj" />
     <ProjectReference Include="..\ShareReview.Data\ShareReview.Data.csproj" />
     <ProjectReference Include="..\ShareReview.Models\ShareReview.Models.csproj" />
+    <ProjectReference Include="..\ShareReview.Services\ShareReview.Services.csproj" />
   </ItemGroup>
 
 </Project>

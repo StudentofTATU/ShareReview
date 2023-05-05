@@ -1,5 +1,12 @@
+using Microsoft.AspNetCore.Identity;
+using System;
 using Microsoft.EntityFrameworkCore;
 using ShareReview.Data;
+using ShareReview.Data.Interfaces;
+using ShareReview.Data.Repository;
+using ShareReview.Models.Users;
+using ShareReview.Services;
+using ShareReview.Services.Interfaces;
 
 namespace ShareReview.Web
 {
@@ -11,11 +18,17 @@ namespace ShareReview.Web
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration
                     .GetConnectionString("DefaultConnection"));
             });
+
+            builder.Services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
             var app = builder.Build();
 
