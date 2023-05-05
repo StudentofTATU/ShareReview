@@ -9,7 +9,7 @@ namespace ShareReview.Data.Interfaces
 
         bool Add(User user);
         bool Update(User user);
-        bool Delete(User user);
+        bool Delete(string userId);
         bool SaveChanges();
     }
 }
