@@ -1,5 +1,53 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using ShareReview.Web.ViewModels;
+
+@model UserRegisterViewModel
 @{
+    ViewData["Title"] = "User Register ";
 }
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <div class="card border-secondary">
+                        <div class="card-header">
+                            <h3 class="mb-0 my-2">Register</h3>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" asp-action="Register" enctype="multipart/form-data">
+                                <div class="form-group mb-3">
+                                    <input asp-for="Name" class="form-control form-control-lg" placeholder="Enter name" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+
+                                <div class=" form-group mb-3">
+                                    <input asp-for="Email" class="form-control form-control-lg" placeholder="Enter email" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+
+                                <div class=" form-group mb-3">
+                                    <input asp-for="Password" type="password"
+                                           class="form-control form-control-lg" placeholder="Enter password" />
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col text-end">
+                                        <button class="btn btn-success btn-lg" type="submit">Register</button>
+                                    </div>
+                                </div>
+
+                                <a asp-area="" asp-controller="" asp-action=""> Login </a>
+
+                                @if (TempData["message"] != null)
+                                {
+                                    <div>@TempData["message"]</div>
+                                }
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
