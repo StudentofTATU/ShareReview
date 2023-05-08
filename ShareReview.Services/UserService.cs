@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using ShareReview.Contracts.Users;
 using ShareReview.Data.Interfaces;
 using ShareReview.Models.Users;
@@ -6,51 +7,29 @@ using ShareReview.Services.Interfaces;
 
 namespace ShareReview.Services
 {
-    public class UserService : IUserService
+    public partial class UserService : IUserService
     {
-        private readonly UserManager<User> userManager;
         private readonly IUserRepository userRepository;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
 
-        public UserService(UserManager<User> userManager, IUserRepository userRepository)
+        public UserService(IUserRepository userRepository,
+            UserManager<User> userManager, SignInManager<User> signInManager)
         {
-            this.userManager = userManager;
             this.userRepository = userRepository;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         public async Task<Status> RegisterAsync(RegisterUserDTO userDTO)
         {
-            var status=new Status();
-            var userExists = await userManager.FindByNameAsync(userDTO.Name);
+            var status = await IsUserExists(userDTO);
+            if(status.StatusCode== 1) { return status; }
 
-            if(userExists !=null)
-            {
-                status.StatusCode = 0; 
-                status.Message="User already exist";
-                return status;
-            }
+            User user =GenerateUser(userDTO);
 
-            User user = new()
-            {
-                UserName = userDTO.Name,
-                Email = userDTO.Email,
-                CreatedDateTime = DateTimeOffset.UtcNow,
-                UserState = UserState.ACTIVE,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                EmailConfirmed = true,
-                PhoneNumberConfirmed = true
-            };
+            status=await SaveUser(user,userDTO);
 
-            var saveUser=await userManager.CreateAsync(user,userDTO.Password);
-
-            if (!saveUser.Succeeded)
-            {
-                status.StatusCode = 0;
-                status.Message = "User registration is failed.";
-                return status;
-            }
-
-            status.StatusCode = 1;
-            status.Message = "You have registered successfully";
             return status;
         }
 
@@ -90,6 +69,37 @@ namespace ShareReview.Services
             }
 
             return status;
+        }
+
+        public async Task<Status> LoginAsync(LoginUserDTO userDTO)
+        {
+            Status status;
+            var user = await userManager.FindByNameAsync(userDTO.Name);
+
+            status=await IsUserValid(user, userDTO);
+
+            if(status.StatusCode == 1)
+            {
+                status=await SignInUser(user,userDTO);
+            }
+
+            return status;  
+        }
+
+
+        
+        public async Task LogoutAsync()
+        {
+            await signInManager.SignOutAsync();
+        }
+
+        public async Task<UserDTO> GetCurrentUserAsync(HttpContext httpContext)
+        {
+            string userId = userManager.GetUserId(httpContext.User);
+
+            User user= await userManager.FindByIdAsync(userId);
+
+            return new UserDTO(user);
         }
     }
 }
