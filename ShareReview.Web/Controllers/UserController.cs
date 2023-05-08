@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ShareReview.Contracts.Users;
 using ShareReview.Services.Interfaces;
 using ShareReview.Web.ViewModels;
@@ -14,9 +15,13 @@ namespace ShareReview.Web.Controllers
             this.userService = userService;
         }
 
-        public IActionResult Index()
+        [Authorize]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            UserDTO userDTO =await userService.GetCurrentUserAsync(HttpContext);
+            UserViewModel userViewModel=new UserViewModel(userDTO);
+            TempData["userName"] = userDTO.Name;
+            return View(userViewModel);
         }
 
         [HttpGet]
@@ -35,6 +40,33 @@ namespace ShareReview.Web.Controllers
             }
 
             return View();  
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(UserLoginViewModel userViewModel) 
+        {
+            if(!ModelState.IsValid) { return View(userViewModel); }
+
+            var result = await userService.LoginAsync(userViewModel.GetUserDTO());
+
+            if (result.StatusCode == 1)
+            {
+                return RedirectToAction("Index","User");
+            }
+            else
+            {
+                TempData["message"] = result.Message;
+                return RedirectToAction(nameof(Login));
+            }
+        }
+
+        public IActionResult Login() { return View(); }
+
+        [Authorize]
+        public async Task<IActionResult> Logout() 
+        { 
+            await userService.LogoutAsync();
+            return RedirectToAction(nameof(Login)); 
         }
     }
 }
