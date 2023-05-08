@@ -36,7 +36,7 @@ namespace ShareReview.Web
             })
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
-
+            builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/User/Login");
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
