@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShareReview.Contracts.Users;
+using ShareReview.Models.Users;
 using ShareReview.Services.Interfaces;
 using ShareReview.Web.ViewModels;
 
@@ -24,6 +25,11 @@ namespace ShareReview.Web.Controllers
             return View(userViewModel);
         }
 
+        [Authorize(Roles ="Admin")]
+        public async Task<IActionResult> Users()
+        {
+            return View();
+        }
         [HttpGet]
         public IActionResult Register() {
             return View();
@@ -42,6 +48,24 @@ namespace ShareReview.Web.Controllers
             return View();  
         }
 
+        [HttpGet]
+        public IActionResult RegisterAdmin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterAdmin(UserRegisterViewModel userVeiwModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await userService.RegisterAdminAsync(userVeiwModel.GetUserDTO());
+                TempData["message"] = result.Message;
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View();
+        }
         [HttpPost]
         public async Task<IActionResult> Login(UserLoginViewModel userViewModel) 
         {
@@ -67,6 +91,12 @@ namespace ShareReview.Web.Controllers
         { 
             await userService.LogoutAsync();
             return RedirectToAction(nameof(Login)); 
+        }
+
+        [Route("~/Account/AccessDenied")]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }
