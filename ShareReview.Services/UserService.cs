@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using ShareReview.Contracts.Users;
 using ShareReview.Data.Interfaces;
@@ -12,13 +13,15 @@ namespace ShareReview.Services
         private readonly IUserRepository userRepository;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public UserService(IUserRepository userRepository,
-            UserManager<User> userManager, SignInManager<User> signInManager)
+        public UserService(IUserRepository userRepository,UserManager<User> userManager,
+            SignInManager<User> signInManager,RoleManager<IdentityRole> roleManager)
         {
             this.userRepository = userRepository;
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.roleManager = roleManager;
         }
 
         public async Task<Status> RegisterAsync(RegisterUserDTO userDTO)
@@ -100,6 +103,40 @@ namespace ShareReview.Services
             User user= await userManager.FindByIdAsync(userId);
 
             return new UserDTO(user);
+        }
+
+        public async Task AddRoles()
+        {
+                List<UserRoles> roles =new List<UserRoles> { UserRoles.User,UserRoles.Admin};
+                foreach (var role in roles)
+                {
+                    if (!await roleManager.RoleExistsAsync(role.ToString()))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(role.ToString()));
+                    }
+                }
+        }
+
+        public async Task<Status> RegisterAdminAsync(RegisterUserDTO userDTO)
+        {
+           await AddRoles();
+            var status = await IsUserExists(userDTO);
+            if (status.StatusCode == 1) { return status; }
+
+            User user = GenerateUser(userDTO);
+
+            status = await SaveUser(user, userDTO);
+
+
+            if (status.StatusCode == 1)
+            {
+                if (await roleManager.RoleExistsAsync(UserRoles.Admin.ToString()))
+                {
+                    await userManager.AddToRoleAsync(user, UserRoles.Admin.ToString());
+                }
+            }
+
+            return status;
         }
     }
 }

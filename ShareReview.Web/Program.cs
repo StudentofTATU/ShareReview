@@ -12,7 +12,7 @@ namespace ShareReview.Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +33,7 @@ namespace ShareReview.Web
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
-            })
+            }).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
             builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/User/Login");
