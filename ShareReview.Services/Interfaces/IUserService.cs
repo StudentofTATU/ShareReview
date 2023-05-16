@@ -6,6 +6,7 @@ namespace ShareReview.Services.Interfaces
     public interface IUserService
     {
         Task<Status> RegisterAsync(RegisterUserDTO userDTO);
+        Task<Status> RegisterAdminAsync(RegisterUserDTO userDTO);
         Task<Status> LoginAsync(LoginUserDTO userDTO);
         Task<IEnumerable<UserDTO>> GetAllUsersAsync();
         Task<UserDTO> GetUserByIdAsync(string userId);
