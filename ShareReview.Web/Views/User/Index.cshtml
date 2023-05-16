@@ -1,7 +1,10 @@
-﻿@using ShareReview.Web.ViewModels;
+﻿@using ShareReview.Web.ViewModels.Users;
 
 @model UserViewModel;
 @{}
 <h2>@Model.Name</h2>
 <h2>@Model.Email</h2>
+
+<a class="nav-link text-dark" asp-area="" asp-controller="Review" asp-action="Create">Create new Review</a>
+
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ShareReview.Models.Reviews;
 using ShareReview.Models.Users;
 
 namespace ShareReview.Data
@@ -10,6 +11,7 @@ namespace ShareReview.Data
         { }
 
         public DbSet<User> Users { set; get; }
+        public DbSet<Review> Reviews { set; get; }
 
     }
 }

@@ -24,7 +24,7 @@ namespace ShareReview.Data.Repository
 
         public bool Add(User user)
         {
-            context.Add(user);
+            context.Users.Add(user);
 
             return SaveChanges();
         }

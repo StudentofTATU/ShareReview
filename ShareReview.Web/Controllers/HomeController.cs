@@ -1,21 +1,25 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using ShareReview.Contracts.Reviews;
+using ShareReview.Services.Interfaces;
 using ShareReview.Web.Models;
 
 namespace ShareReview.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IReviewService reviewService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IReviewService reviewService)
         {
-            _logger = logger;
+            this.reviewService = reviewService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            IEnumerable<ReviewDTO> reviews=await reviewService.GetAllReviewsAsync();
+            return View(reviews);
         }
 
         public IActionResult Privacy()
@@ -23,10 +27,5 @@ namespace ShareReview.Web.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

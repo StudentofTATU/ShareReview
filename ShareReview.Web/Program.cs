@@ -19,7 +19,9 @@ namespace ShareReview.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IReviewService, ReviewService>();
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration
