@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ShareReview.Contracts.Users;
 using ShareReview.Services.Interfaces;
 using ShareReview.Web.ViewModels;
@@ -61,6 +64,30 @@ namespace ShareReview.Web.Controllers
         }
 
         public IActionResult Login() { return View(); }
+
+
+        public IActionResult LogInGoogle()
+        {
+            var properties = new AuthenticationProperties { RedirectUri = Url.Action("SignGoogle") };
+            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+        }
+
+        [Route("~/User/signin-google")]
+        public  async Task<IActionResult> SignGoogle()
+        {
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+
+            var claims = result.Principal.Identities
+                .FirstOrDefault().Claims.Select(claim => new
+                {
+                    claim.Issuer,
+                    claim.OriginalIssuer,
+                    claim.Type,
+                    claim.Value
+                });
+
+            return Json(claims);        
+        }
 
         [Authorize]
         public async Task<IActionResult> Logout() 
