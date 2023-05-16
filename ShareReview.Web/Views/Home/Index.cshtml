@@ -1,8 +1,38 @@
-﻿@{
+﻿@using ShareReview.Contracts.Reviews;
+@model IEnumerable<ReviewDTO>;
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h2 class="display-4">Reviews</h2>
+    @if (Model != null)
+    {
+        <ul class="list-unstyled">
+            @foreach (ReviewDTO review in Model)
+            {
+                <li class="media" style="border-style: double; margin:10px;">
+                    @if (review.Image.Length > 0)
+                    {
+                        <img class="mr-3" src="~/images/@review.Image" width="200" height="120" >
+                    }
+
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1">Name: @review.Name</h5>
+                        <h5 class="mt-0 mb-1">Title: @review.ArtTitle</h5>
+                        <h5 class="mt-0 mb-1">Group: @review.Group</h5>
+                        <h5 class="mt-0 mb-1">Likes:@review.Likes ,Grade: @review.Grade</h5>
+
+                        <div style="border-left: 4px solid red;
+  background-color: lightgrey; margin:10px;">
+                            @Html.Raw(@review.Text)
+                        </div>
+
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+
+
 </div>

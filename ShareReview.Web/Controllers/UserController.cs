@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShareReview.Contracts.Users;
 using ShareReview.Models.Users;
 using ShareReview.Services.Interfaces;
-using ShareReview.Web.ViewModels;
+using ShareReview.Web.ViewModels.Users;
 
 namespace ShareReview.Web.Controllers
 {
